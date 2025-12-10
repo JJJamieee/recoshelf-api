@@ -1,0 +1,149 @@
+openapi: 3.0.4
+info:
+  title: recoshelf-api
+  description: REST API for app ReCoShelf
+  version: 0.0.1
+
+servers:
+  - url: http://127.0.0.1:3000/v1
+    description: Local server
+
+paths:
+  /me/releases:
+    get:
+      summary: Get authenticated user's releases.
+      tags:
+        - me
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: A JSON array of user's releases.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Release"
+        "204":
+          description: No Data
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      summary: Add a release to user collection.
+      tags:
+        - me
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Release"
+      responses:
+        "201":
+          description: Created
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /me/releases/{releaseId}:
+    delete:
+      summary: Delete a release from user collection.
+      tags:
+        - me
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+
+    Release:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        country:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+        releaseYear:
+          type: integer
+        tracklist:
+          type: array
+          items:
+            $ref: "#/components/schemas/Track"
+        images:
+          type: string
+        barcode:
+          type: string
+
+    Track:
+      type: object
+      properties:
+        duration:
+          type: string
+        title:
+          type: string
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    Unauthorized:
+      description: Missing or invalid token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    InternalError:
+      description: Something went wrong on the server
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
