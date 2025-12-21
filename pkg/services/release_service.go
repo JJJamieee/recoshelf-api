@@ -6,7 +6,7 @@ import (
 )
 
 type ReleaseService interface {
-	GetUserReleases(userID int) (*[]entities.Release, error)
+	GetUserReleases(userID int64) (*[]entities.Release, error)
 }
 
 type releaseService struct {
@@ -19,6 +19,6 @@ func NewReleaseService(rr repositories.ReleaseRepository) ReleaseService {
 	}
 }
 
-func (s *releaseService) GetUserReleases(userID int) (*[]entities.Release, error) {
+func (s *releaseService) GetUserReleases(userID int64) (*[]entities.Release, error) {
 	return s.releaseRepository.GetReleasesByUser(userID)
 }

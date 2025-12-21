@@ -17,7 +17,7 @@ func GetUserReleases(releaseService services.ReleaseService) fiber.Handler {
 			return app_errors.InvalidUserIDError
 		}
 
-		releases, err := releaseService.GetUserReleases(userID)
+		releases, err := releaseService.GetUserReleases(int64(userID))
 		if err != nil {
 			slog.Error("Get user releases failed.", "msg", err.Error())
 			return app_errors.InternalServerError

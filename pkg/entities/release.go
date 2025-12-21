@@ -5,7 +5,7 @@ import (
 )
 
 type Release struct {
-	ID          int         `json:"id" db:"id"`
+	ID          int64       `json:"id" db:"id"`
 	Title       string      `json:"title" db:"title"`
 	Country     string      `json:"country" db:"country"`
 	Genres      StringSlice `json:"genres" db:"genres"`
