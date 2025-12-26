@@ -28,7 +28,7 @@ func (s *releaseService) GetUserReleases(userID int64) (*[]entities.Release, err
 }
 
 func (s *releaseService) CreateUserRelease(userID int64, release entities.Release) error {
-	existRelease, err := s.releaseRepository.GetReleaseByID(release.ID)
+	existRelease, err := s.releaseRepository.GetReleaseBySource(release.Source, release.SourceReleaseID)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return err
 	}

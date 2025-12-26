@@ -1,15 +1,22 @@
 package requests
 
-import "recoshelf-api/pkg/entities"
+import (
+	"time"
+
+	"recoshelf-api/pkg/entities"
+)
 
 type ReleaseRequest struct {
-	Title       string         `json:"title" validate:"required"`
-	Country     string         `json:"country" validate:"required"`
-	Genres      []string       `json:"genres" validate:"required"`
-	ReleaseYear uint           `json:"releaseYear" validate:"required"`
-	Tracklist   []TrackRequest `json:"tracklist" validate:"required"`
-	Images      *string        `json:"images"`
-	Barcode     string         `json:"barcode" validate:"required"`
+	Source          string         `json:"source" validate:"required"`
+	SourceReleaseID int64          `json:"sourceReleaseId" validate:"required"`
+	Title           string         `json:"title" validate:"required"`
+	Country         string         `json:"country" validate:"required"`
+	Genres          []string       `json:"genres" validate:"required"`
+	ReleaseYear     uint           `json:"releaseYear" validate:"required"`
+	Tracklist       []TrackRequest `json:"tracklist" validate:"required"`
+	Images          *string        `json:"images"`
+	Barcode         string         `json:"barcode" validate:"required"`
+	FetchedAt       time.Time      `json:"fetchedAt" validate:"required"`
 }
 
 type TrackRequest struct {
@@ -27,12 +34,15 @@ func (r ReleaseRequest) ToEntity() entities.Release {
 	}
 
 	return entities.Release{
-		Title:       r.Title,
-		Country:     r.Country,
-		Genres:      entities.StringSlice(r.Genres),
-		ReleaseYear: r.ReleaseYear,
-		Tracklist:   tracklist,
-		Images:      r.Images,
-		Barcode:     r.Barcode,
+		Source:          r.Source,
+		SourceReleaseID: r.SourceReleaseID,
+		Title:           r.Title,
+		Country:         r.Country,
+		Genres:          entities.StringSlice(r.Genres),
+		ReleaseYear:     r.ReleaseYear,
+		Tracklist:       tracklist,
+		Images:          r.Images,
+		Barcode:         r.Barcode,
+		FetchedAt:       r.FetchedAt.UTC(),
 	}
 }

@@ -10,7 +10,7 @@ import (
 )
 
 type ReleaseRepository interface {
-	GetReleaseByID(releaseID int64) (*entities.Release, error)
+	GetReleaseBySource(source string, sourceReleaseID int64) (*entities.Release, error)
 	GetReleasesByUser(userID int64) (*[]entities.Release, error)
 	CreateRelease(release entities.Release) (int64, error)
 	CreateReleaseUserRelation(userID int64, releaseID int64) error
@@ -26,13 +26,13 @@ func NewReleaseRepo(db *sqlx.DB) ReleaseRepository {
 	}
 }
 
-func (r *releaseRepository) GetReleaseByID(releaseID int64) (*entities.Release, error) {
+func (r *releaseRepository) GetReleaseBySource(source string, sourceReleaseID int64) (*entities.Release, error) {
 	q := `
-		SELECT * FROM releases WHERE id = ?
+		SELECT * FROM releases WHERE source = ? AND source_release_id = ?
 	`
 
 	release := entities.Release{}
-	err := r.DB.Get(&release, q, releaseID)
+	err := r.DB.Get(&release, q, source, sourceReleaseID)
 
 	return &release, err
 }
@@ -53,8 +53,8 @@ func (r *releaseRepository) GetReleasesByUser(userID int64) (*[]entities.Release
 
 func (r *releaseRepository) CreateRelease(release entities.Release) (int64, error) {
 	q := `
-		INSERT INTO releases (title, country, genres, release_year, tracklist, images, barcode)
-		VALUES (:title, :country, :genres, :release_year, :tracklist, :images, :barcode)
+		INSERT INTO releases (source, source_release_id, title, country, genres, release_year, tracklist, images, barcode, fetched_at)
+		VALUES (:source, :source_release_id, :title, :country, :genres, :release_year, :tracklist, :images, :barcode, :fetched_at)
 	`
 
 	result, err := r.DB.NamedExec(q, release)

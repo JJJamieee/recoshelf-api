@@ -9,7 +9,9 @@ POST http://127.0.0.1:3000/v1/me/releases
 content-type: application/json
 
 {
-  "title": "Test1",
+  "source": "discogs",
+  "sourceReleaseId": 7,
+  "title": "Test7",
   "country": "JP",
   "genres": [
     "rock"
@@ -25,5 +27,6 @@ content-type: application/json
       "title": "Song2"
     }
   ],
-  "barcode": "12345678"
+  "barcode": "12345678",
+  "fetchedAt": "2025-01-08T01:30:00Z"
 }
