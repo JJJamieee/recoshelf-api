@@ -43,7 +43,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Release"
+              $ref: "#/components/schemas/ReleaseRequest"
       responses:
         "201":
           description: Created
@@ -112,8 +112,40 @@ components:
         barcode:
           type: string
 
+    ReleaseRequest:
+      type: object
+      required:
+        - title
+        - country
+        - genres
+        - releaseYear
+        - tracklist
+        - barcode
+      properties:
+        title:
+          type: string
+        country:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+        releaseYear:
+          type: integer
+        tracklist:
+          type: array
+          items:
+            $ref: "#/components/schemas/Track"
+        images:
+          type: string
+        barcode:
+          type: string
+
     Track:
       type: object
+      required:
+        - duration
+        - title
       properties:
         duration:
           type: string
