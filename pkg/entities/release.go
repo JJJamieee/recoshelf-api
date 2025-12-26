@@ -9,7 +9,7 @@ type Release struct {
 	Title       string      `json:"title" db:"title"`
 	Country     string      `json:"country" db:"country"`
 	Genres      StringSlice `json:"genres" db:"genres"`
-	ReleaseYear uint        `json:"release_year" db:"release_year"`
+	ReleaseYear uint        `json:"releaseYear" db:"release_year"`
 	Tracklist   TrackList   `json:"tracklist" db:"tracklist"`
 	Images      *string     `json:"images" db:"images"`
 	Barcode     string      `json:"barcode" db:"barcode"`
