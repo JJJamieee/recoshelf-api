@@ -14,6 +14,7 @@ type ReleaseRepository interface {
 	GetReleasesByUser(userID int64) (*[]entities.Release, error)
 	CreateRelease(release entities.Release) (int64, error)
 	CreateReleaseUserRelation(userID int64, releaseID int64) error
+	DeleteReleaseUserRelation(userID int64, releaseID int64) error
 }
 
 type releaseRepository struct {
@@ -87,6 +88,19 @@ func (r *releaseRepository) CreateReleaseUserRelation(userID int64, releaseID in
 			return nil
 		}
 	}
+
+	return err
+}
+
+func (r *releaseRepository) DeleteReleaseUserRelation(userID int64, releaseID int64) error {
+	q := `
+		DELETE FROM releases_users WHERE release_id = :releaseID AND user_id = :userID
+	`
+
+	_, err := r.DB.NamedExec(q, map[string]interface{}{
+		"userID":    userID,
+		"releaseID": releaseID,
+	})
 
 	return err
 }
