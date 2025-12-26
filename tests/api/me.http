@@ -30,3 +30,6 @@ content-type: application/json
   "barcode": "12345678",
   "fetchedAt": "2025-01-08T01:30:00Z"
 }
+
+### Delete a release from user collection
+DELETE  http://127.0.0.1:3000/v1/me/releases/1

@@ -19,4 +19,5 @@ func MeRouter(app fiber.Router, db *sqlx.DB, validate *validator.Validate) {
 
 	me.Get("/releases", handlers.GetUserReleases(releaseService))
 	me.Post("/releases", handlers.CreateUserRelease(releaseService, validate))
+	me.Delete("/releases/:releaseID", handlers.DeleteUserRelease(releaseService))
 }
