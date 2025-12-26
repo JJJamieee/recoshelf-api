@@ -8,6 +8,7 @@ import (
 	"recoshelf-api/api/routes"
 	"recoshelf-api/pkg/app_errors"
 
+	"github.com/go-playground/validator/v10"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
@@ -31,6 +32,8 @@ func main() {
 		os.Exit(1)
 	}
 	defer db.Close()
+
+	validate := validator.New()
 
 	app := fiber.New(fiber.Config{
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
@@ -62,7 +65,7 @@ func main() {
 	})
 
 	v1 := app.Group("/v1")
-	routes.MeRouter(v1, db)
+	routes.MeRouter(v1, db, validate)
 
 	app.Listen(":3000")
 }

@@ -1,0 +1,32 @@
+### Hello World
+GET http://127.0.0.1:3000
+
+### Get authenticated user's releases.
+GET http://127.0.0.1:3000/v1/me/releases
+
+### Add a release to user collection.
+POST http://127.0.0.1:3000/v1/me/releases
+content-type: application/json
+
+{
+  "source": "discogs",
+  "sourceReleaseId": 7,
+  "title": "Test7",
+  "country": "JP",
+  "genres": [
+    "rock"
+  ],
+  "releaseYear": 2008,
+  "tracklist": [
+    {
+      "duration": "3:10",
+      "title": "Song1"
+    },
+    {
+      "duration": "3:47",
+      "title": "Song2"
+    }
+  ],
+  "barcode": "12345678",
+  "fetchedAt": "2025-01-08T01:30:00Z"
+}
