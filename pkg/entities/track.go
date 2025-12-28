@@ -7,8 +7,8 @@ import (
 )
 
 type Track struct {
-	Duration string
-	Title    string
+	Duration string `json:"duration"`
+	Title    string `json:"title"`
 }
 
 type TrackList []Track
