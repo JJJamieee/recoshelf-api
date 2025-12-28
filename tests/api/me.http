@@ -33,3 +33,11 @@ content-type: application/json
 
 ### Delete a release from user collection
 DELETE  http://127.0.0.1:3000/v1/me/releases/1
+
+### Batch delete releases from user collection
+POST http://127.0.0.1:3000/v1/me/releases/batch-delete
+content-type: application/json
+
+{
+  "ids": [1, 2, 3]
+}

@@ -12,6 +12,7 @@ type ReleaseService interface {
 	GetUserReleases(userID int64) (*[]entities.Release, error)
 	CreateUserRelease(userID int64, release entities.Release) error
 	DeleteUserRelease(userID int64, releaseID int64) error
+	BatchDeleteUserReleases(userID int64, releaseIDs []int64) (int64, error)
 }
 
 type releaseService struct {
@@ -51,4 +52,8 @@ func (s *releaseService) CreateUserRelease(userID int64, release entities.Releas
 
 func (s *releaseService) DeleteUserRelease(userID int64, releaseID int64) error {
 	return s.releaseRepository.DeleteReleaseUserRelation(userID, releaseID)
+}
+
+func (s *releaseService) BatchDeleteUserReleases(userID int64, releaseIDs []int64) (int64, error) {
+	return s.releaseRepository.DeleteReleaseUserRelations(userID, releaseIDs)
 }
