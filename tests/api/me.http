@@ -10,7 +10,7 @@ content-type: application/json
 
 {
   "source": "discogs",
-  "sourceReleaseId": 7,
+  "sourceReleaseID": 7,
   "title": "Test7",
   "country": "JP",
   "genres": [
