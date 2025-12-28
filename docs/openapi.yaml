@@ -110,6 +110,10 @@ components:
       properties:
         id:
           type: integer
+        source:
+          type: string
+        sourceReleaseID:
+          type: integer
         title:
           type: string
         country:
@@ -128,6 +132,9 @@ components:
           type: string
         barcode:
           type: string
+        fetchedAt:
+          type: string
+          format: date-time
 
     ReleaseRequest:
       type: object
