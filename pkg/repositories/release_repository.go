@@ -15,6 +15,7 @@ type ReleaseRepository interface {
 	CreateRelease(release entities.Release) (int64, error)
 	CreateReleaseUserRelation(userID int64, releaseID int64) error
 	DeleteReleaseUserRelation(userID int64, releaseID int64) error
+	DeleteReleaseUserRelations(userID int64, releaseIDs []int64) (int64, error)
 }
 
 type releaseRepository struct {
@@ -103,4 +104,28 @@ func (r *releaseRepository) DeleteReleaseUserRelation(userID int64, releaseID in
 	})
 
 	return err
+}
+
+func (r *releaseRepository) DeleteReleaseUserRelations(userID int64, releaseIDs []int64) (int64, error) {
+	if len(releaseIDs) == 0 {
+		return 0, nil
+	}
+
+	q, args, err := sqlx.In(
+		`DELETE FROM releases_users WHERE user_id = ? AND release_id IN (?)`,
+		userID,
+		releaseIDs,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	q = r.DB.Rebind(q)
+
+	result, err := r.DB.Exec(q, args...)
+	if err != nil {
+		return 0, err
+	}
+
+	return result.RowsAffected()
 }

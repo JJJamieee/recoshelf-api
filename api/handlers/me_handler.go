@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"strconv"
 
+	"recoshelf-api/api/presenter"
 	"recoshelf-api/api/requests"
 	"recoshelf-api/pkg/app_errors"
 	"recoshelf-api/pkg/services"
@@ -82,5 +83,34 @@ func DeleteUserRelease(releaseService services.ReleaseService) fiber.Handler {
 		}
 
 		return c.SendStatus(204)
+	}
+}
+
+func BatchDeleteUserReleases(releaseService services.ReleaseService, validate *validator.Validate) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		request := new(requests.BatchDeleteReleaseRequest)
+		if err := c.BodyParser(request); err != nil {
+			return app_errors.InvalidRequestBodyError(err)
+		}
+
+		if errs := validate.Struct(request); errs != nil {
+			return app_errors.InvalidRequestBodyError(errs)
+		}
+
+		userID, ok := c.Locals("userID").(int)
+		if !ok {
+			slog.Error("Invalid user ID.", "userID", userID)
+			return app_errors.InvalidUserIDError
+		}
+
+		deletedCount, err := releaseService.BatchDeleteUserReleases(int64(userID), request.IDs)
+		if err != nil {
+			slog.Error("Batch delete user releases failed.", "msg", err.Error())
+			return app_errors.InternalServerError
+		}
+
+		return c.JSON(presenter.BatchDeleteResponse{
+			DeletedCount: deletedCount,
+		})
 	}
 }
