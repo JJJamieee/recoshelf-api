@@ -68,6 +68,26 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/InternalError"
+  /me/releases/batch-delete:
+    post:
+      summary: Batch delete releases from user collection.
+      tags:
+        - me
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchDeleteRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BatchDeleteSuccessResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
 
 components:
   securitySchemes:
@@ -84,7 +104,6 @@ components:
           type: string
         code:
           type: string
-          example: "INTERNAL_SERVER_ERROR"
 
     Release:
       type: object
@@ -157,6 +176,17 @@ components:
         title:
           type: string
 
+    BatchDeleteRequest:
+      type: object
+      required: [ids]
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+          minItems: 1
+          maxItems: 100
+
   responses:
     BadRequest:
       description: Invalid request
@@ -185,3 +215,13 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
+
+    BatchDeleteSuccessResponse:
+      description: Deleted items count for batch delete.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              deletedCount:
+                type: integer
