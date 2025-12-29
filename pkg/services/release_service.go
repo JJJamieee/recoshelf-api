@@ -10,7 +10,7 @@ import (
 
 type ReleaseService interface {
 	GetUserReleases(userID int64) (*[]entities.Release, error)
-	CreateUserRelease(userID int64, release entities.Release) error
+	CreateUserRelease(userID int64, release entities.Release) (*entities.Release, error)
 	DeleteUserRelease(userID int64, releaseID int64) error
 	BatchDeleteUserReleases(userID int64, releaseIDs []int64) (int64, error)
 }
@@ -29,25 +29,33 @@ func (s *releaseService) GetUserReleases(userID int64) (*[]entities.Release, err
 	return s.releaseRepository.GetReleasesByUser(userID)
 }
 
-func (s *releaseService) CreateUserRelease(userID int64, release entities.Release) error {
+func (s *releaseService) CreateUserRelease(userID int64, release entities.Release) (*entities.Release, error) {
 	existRelease, err := s.releaseRepository.GetReleaseBySource(release.Source, release.SourceReleaseID)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return err
+		return nil, err
 	}
 
 	var releaseID int64
-	if errors.Is(err, sql.ErrNoRows) || existRelease == nil {
+	exists := err == nil && existRelease != nil
+	if !exists {
 		releaseID, err = s.releaseRepository.CreateRelease(release)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	} else {
 		releaseID = existRelease.ID
 	}
 
 	err = s.releaseRepository.CreateReleaseUserRelation(userID, releaseID)
+	if err != nil {
+		return nil, err
+	}
 
-	return err
+	if exists {
+		return existRelease, nil
+	}
+
+	return s.releaseRepository.GetReleaseByID(releaseID)
 }
 
 func (s *releaseService) DeleteUserRelease(userID int64, releaseID int64) error {

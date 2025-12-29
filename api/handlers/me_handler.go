@@ -49,13 +49,13 @@ func CreateUserRelease(releaseService services.ReleaseService, validate *validat
 		}
 
 		release := releaseRequest.ToEntity()
-		err := releaseService.CreateUserRelease(int64(userID), release)
+		createdRelease, err := releaseService.CreateUserRelease(int64(userID), release)
 		if err != nil {
 			slog.Error("Create user releases failed.", "msg", err.Error())
 			return app_errors.InternalServerError
 		}
 
-		return c.SendStatus(201)
+		return c.Status(201).JSON(createdRelease)
 	}
 }
 
