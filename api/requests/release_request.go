@@ -8,7 +8,7 @@ import (
 
 type ReleaseRequest struct {
 	Source          string         `json:"source" validate:"required"`
-	SourceReleaseID int64          `json:"sourceReleaseId" validate:"required"`
+	SourceReleaseID int64          `json:"sourceReleaseID" validate:"required"`
 	Title           string         `json:"title" validate:"required"`
 	Country         string         `json:"country" validate:"required"`
 	Genres          []string       `json:"genres" validate:"required"`

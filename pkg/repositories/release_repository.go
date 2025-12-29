@@ -11,6 +11,7 @@ import (
 
 type ReleaseRepository interface {
 	GetReleaseBySource(source string, sourceReleaseID int64) (*entities.Release, error)
+	GetReleaseByID(releaseID int64) (*entities.Release, error)
 	GetReleasesByUser(userID int64) (*[]entities.Release, error)
 	CreateRelease(release entities.Release) (int64, error)
 	CreateReleaseUserRelation(userID int64, releaseID int64) error
@@ -35,6 +36,17 @@ func (r *releaseRepository) GetReleaseBySource(source string, sourceReleaseID in
 
 	release := entities.Release{}
 	err := r.DB.Get(&release, q, source, sourceReleaseID)
+
+	return &release, err
+}
+
+func (r *releaseRepository) GetReleaseByID(releaseID int64) (*entities.Release, error) {
+	q := `
+		SELECT * FROM releases WHERE id = ?
+	`
+
+	release := entities.Release{}
+	err := r.DB.Get(&release, q, releaseID)
 
 	return &release, err
 }
