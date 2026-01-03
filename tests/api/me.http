@@ -3,15 +3,17 @@ GET http://127.0.0.1:3000
 
 ### Get authenticated user's releases.
 GET http://127.0.0.1:3000/v1/me/releases
+X-User-Id: 1
 
 ### Add a release to user collection.
 POST http://127.0.0.1:3000/v1/me/releases
 content-type: application/json
+X-User-Id: 1
 
 {
   "source": "discogs",
-  "sourceReleaseID": 7,
-  "title": "Test7",
+  "sourceReleaseID": 1,
+  "title": "TestRelease",
   "country": "JP",
   "genres": [
     "rock"
@@ -33,10 +35,12 @@ content-type: application/json
 
 ### Delete a release from user collection
 DELETE  http://127.0.0.1:3000/v1/me/releases/1
+X-User-Id: 1
 
 ### Batch delete releases from user collection
 POST http://127.0.0.1:3000/v1/me/releases/batch-delete
 content-type: application/json
+X-User-Id: 1
 
 {
   "ids": [1, 2, 3]
