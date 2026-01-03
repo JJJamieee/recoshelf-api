@@ -14,6 +14,8 @@ paths:
       summary: Get authenticated user's releases.
       tags:
         - me
+      parameters:
+        - $ref: "#/components/parameters/XUserId"
       security:
         - bearerAuth: []
       responses:
@@ -36,6 +38,8 @@ paths:
       summary: Add a release to user collection.
       tags:
         - me
+      parameters:
+        - $ref: "#/components/parameters/XUserId"
       security:
         - bearerAuth: []
       requestBody:
@@ -63,6 +67,8 @@ paths:
       summary: Delete a release from user collection.
       tags:
         - me
+      parameters:
+        - $ref: "#/components/parameters/XUserId"
       security:
         - bearerAuth: []
       responses:
@@ -77,6 +83,8 @@ paths:
       summary: Batch delete releases from user collection.
       tags:
         - me
+      parameters:
+        - $ref: "#/components/parameters/XUserId"
       requestBody:
         required: true
         content:
@@ -94,6 +102,15 @@ paths:
           $ref: "#/components/responses/InternalError"
 
 components:
+  parameters:
+    XUserId:
+      name: X-User-Id
+      in: header
+      description: Mock user id for local development.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
   securitySchemes:
     bearerAuth:
       type: http
